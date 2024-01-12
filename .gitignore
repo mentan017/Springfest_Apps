@@ -1,3 +1,4 @@
-/Client/images/
+/Client/files
 /node_modules
+/data
 .env
