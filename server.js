@@ -50,8 +50,10 @@ app.post('/create-t-shirt', async function(req, res){
     execSync(`rm ./Client/files/${color}.png ; rm new_temp.png`);
     res.sendStatus(200);
 });
-app.post('/batch-create-t-shirt', async function(req, res){
+
+app.post('/create-t-shirt-presentation', async function(req, res){
     try{
+        //Get the file
         const form = new formidable.IncomingForm();
         form.multiple = false;
         form.parse(req, async function(err, fields, files){
@@ -59,121 +61,129 @@ app.post('/batch-create-t-shirt', async function(req, res){
                 console.log(err);
                 res.sendStatus(500);
             }else{
-                var UUID = uuidv4();
-                fs.copyFile(files.files[0].filepath, `${homeDir}/data/${UUID}`, async function(err){
-                    if(err){
-                        console.log(err);
-                        res.sendStatus(500);
-                    }else{
-                        //Do the code
-                        var jsonData = excelToJson({
-                            sourceFile: `./data/${UUID}`
-                        });
-                        var data = jsonData.Sheet1;
-                        var names = [];
-                        var slides = [];
-                        for(var i=1; i<data.length; i++){
-                            var teamName = data[i].A;
-                            var colorNameOr = data[i].B;
-                            var hexValue = data[i].C;
-                            var textColor = data[i].D;
-                            var textManagers = data[i].E || `${teamName} Manager`;
-                            var textTeamLeader = data[i].F;
-                            var textTeam = data[i].G || `${teamName} Team`;
-                            var textCoach = data[i].H;
-                            
-                            var colorName = (colorNameOr.toLowerCase()).split(" ").join("-");
-
-                            names.push(await CreateTShirtImage(hexValue, colorName, textColor, textManagers, "manager"));
-                            slides.push(await CreateSlide(teamName.split("&").join("\\&"), "manager", colorNameOr, textColor, textManagers.split("&").join("\\&"), `t-shirt-${colorName}-manager.png`));
-                            names.push(await CreateTShirtImage(hexValue, colorName, textColor, textTeam, "member"));
-                            slides.push(await CreateSlide(teamName.split("&").join("\\&"), "member", colorNameOr, textColor, textTeam.split("&").join("\\&"), `t-shirt-${colorName}-member.png`));
-                            if(textTeamLeader){
-                                names.push(await CreateTShirtImage(hexValue, colorName, textColor, textTeamLeader, "team-leader"));
-                                slides.push(await CreateSlide(teamName.split("&").join("\\&"), "team leader", colorNameOr, textColor, textTeamLeader.split("&").join("\\&"), `t-shirt-${colorName}-team-leader.png`));
-                            }
-                            if(textCoach){
-                                names.push(await CreateTShirtImage(hexValue, colorName, textColor, textCoach, "coach"));
-                                slides.push(await CreateSlide(teamName.split("&").join("\\&"), "coach", colorNameOr, textColor, textCoach.split("&").join("\\&"), `t-shirt-${colorName}-coach.png`));
-                            }
+                //Save File
+                var newFilePath = await SaveNewDataFile(files.files[0].filepath);
+                if(!newFilePath) res.sendStatus(500);
+                else{
+                    //Convert Excel to JSON
+                    var slides = [];
+                    var jsonData = excelToJson({sourceFile: newFilePath}).Sheet1;
+                    for(var i=1; i<jsonData.length; i++){
+                        var teamData = await GetTShirtData(jsonData[i]);
+                        var roleExists = [true, true, teamData.textTeamLeader || 0, teamData.textCoach || 0];
+                        for(var j=0; j<roleExists.length; j++){
+                            if(roleExists[j]) slides.push(await CreateSlideNew(teamData, j));
                         }
-                        var presentation = `
-\\documentclass{beamer}
-
-\\usepackage{graphicx}
-\\graphicspath{ {./t_shirts/} }
-
-\\usetheme{Singapore}
-%\\usecolortheme{whale}
-
-\\title{T-Shirts Order for \\\\European School of Brussels III}
-\\date{2024}
-
-\\begin{document}
-\\maketitle
-${slides.join("\n")}
-\\end{document}`;
-                        execSync(`cd ./Client/files/ ; mkdir t_shirts ; mv -t t_shirts ${names.join(" ")}`);
-                        execSync(`cd ./Client/files/ ; touch presentation.tex`);
-                        fs.writeFileSync('./Client/files/presentation.tex', presentation);
-                        execSync(`cd ./Client/files/ ; pdflatex presentation.tex`);
-                        execSync(`cd ./Client/files/ ; mv presentation.tex t_shirts ; mv presentation.pdf t_shirts`);
-                        execSync(`cd ./Client/files/ ; zip ${UUID} -r t_shirts`);
-                        execSync(`cd ./Client/files/ ; rm -rf t_shirts presentation.*`);
-                        execSync(`rm ./data/${UUID}`);
-                        res.status(200).send({UUID: UUID});
                     }
-                });
+                    var presentation = await CreatePresentation(slides, newFilePath);
+                    if(presentation) res.sendStatus(200);
+                }
             }
         });
     }catch(e){
         console.log(e);
+        res.sendStatus(500);
     }
 });
 
+async function SaveNewDataFile(filepath){
+    try{
+        var UUID = uuidv4();
+        fs.copyFileSync(filepath, `${homeDir}/data/${UUID}`);
+        return(`${homeDir}/data/${UUID}`);
+    }catch(e){
+        console.log(e);
+        return 0;
+    }
+}
+async function GetTShirtData(jsonData){
+    var data = {
+        teamName: jsonData.A,
+        originalColorName: jsonData.B,
+        hexValue: jsonData.C,
+        textColor: jsonData.D,
+        textManagers: jsonData.E || `${jsonData.A} Manager`,
+        textTeamLeader: jsonData.F,
+        textTeam: jsonData.G || `${jsonData.A} Team`,
+        textCoach: jsonData.H,
+        colorName: ((jsonData.B).toLowerCase()).split(" ").join("-")
+    }
+    return data;
+}
+async function CreateSlideNew(teamData, index){
+    var roles = ['Manager', 'Member', 'Team Leader', 'Coach'];
+    var textVariables = [teamData.textManagers, teamData.textTeam, teamData.textTeamLeader, teamData.textCoach];
+    var teamName = (teamData.teamName).split("&").join("\\&");
+    var TShirtFile = `t-shirt-${teamData.colorName}-${(roles[index].split(" ").join("-")).toLowerCase()}.png`;
+    //Create the T-shirt
+    await CreateTShirtImage(teamData.hexValue, teamData.colorName, teamData.textColor, textVariables[index], (roles[index].split(" ").join("-")).toLowerCase());
+    //Create the slide
+    var text = textVariables[index].split("&").join("\\&");
+    var slide = `
+    \\begin{frame}
+    
+    \\frametitle{\\textbf{${teamName} ${roles[index]}}}
+    
+    \\begin{columns}[T]
+    
+    \\begin{column}{0.40\\textwidth}
+    
+    \\textbf{Color:} ${teamData.originalColorName}\\\\
+    \\textbf{Text Color:} ${teamData.textColor}\\\\
+    \\textbf{Back Text:} ${text}\\\\
+    \\textbf{Amount:} \\\\
+    \\begin{itemize}
+    \\item[-] XXS:
+    \\item[-] XS:
+    \\item[-] S:
+    \\item[-] M:
+    \\item[-] L:
+    \\item[-] XL:
+    \\item[-] XXL:
+    \\item[-] 3XL:
+    \\end{itemize}
+    
+    \\end{column}
+    
+    \\begin{column}{0.50\\textwidth}
+    \\includegraphics[width=\\textwidth]{ ${TShirtFile} }
+    \\end{column}
+    
+    \\end{columns}
+    
+    \\end{frame}`;
+    return slide;
+}
+async function CreatePresentation(slides, newFilePath){
+    var presentation = `
+    \\documentclass{beamer}
+    
+    \\usepackage{graphicx}
+    \\graphicspath{ {./t_shirts/} }
+    
+    \\usetheme{Singapore}
+    %\\usecolortheme{whale}
+    
+    \\title{T-Shirts Order for \\\\European School of Brussels III}
+    \\date{2024}
+    
+    \\begin{document}
+    \\maketitle
+    ${slides.join("\n")}
+    \\end{document}`;
+    //Create the presentation file
+    execSync(`cd ./Client/files/ ; touch presentation.tex`);
+    fs.writeFileSync('./Client/files/presentation.tex', presentation);
+    execSync(`cd ./Client/files/ ; pdflatex presentation.tex ; mv presentation.pdf T_Shirt_Order_Springfest.pdf; rm t-shirt*.png presentation.*`);
+    execSync(`rm ${newFilePath}`);
+    return true;
+}
 async function CreateTShirtImage(hexValue, colorName, textColor, text, position){
     execSync(`convert -size 626x417 xc:${hexValue} ./Client/files/${colorName}.png`);
     execSync(`magick -gravity center -background none -fill ${textColor} -size 150x80 caption:"${text}" temp.png`);
     execSync(`convert -page +0+0 ./Client/files/${colorName}.png -page +0+0 ./resources/t-shirt-template.png -page +190+135 ./resources/logo_${textColor}_no_bg_40.png -page +390+120 ./temp.png -background none -layers merge +repage ./Client/files/t-shirt-${colorName}-${position}.png`)
     execSync(`rm ./Client/files/${colorName}.png ; rm temp.png`);
     return(`t-shirt-${colorName}-${position}.png`)
-}
-async function CreateSlide(teamName, position, colorName, textColor, text, image){
-    var slide = `
-\\begin{frame}
-
-\\frametitle{\\textbf{${teamName} ${position}}}
-
-\\begin{columns}[T]
-
-\\begin{column}{0.40\\textwidth}
-
-\\textbf{Color:} ${colorName}\\\\
-\\textbf{Text Color:} ${textColor}\\\\
-\\textbf{Back Text:} ${text}\\\\
-\\textbf{Amount:} \\\\
-\\begin{itemize}
-\\item[-] XXS:
-\\item[-] XS:
-\\item[-] S:
-\\item[-] M:
-\\item[-] L:
-\\item[-] XL:
-\\item[-] XXL:
-\\item[-] 3XL:
-\\end{itemize}
-
-\\end{column}
-
-\\begin{column}{0.50\\textwidth}
-\\includegraphics[width=\\textwidth]{ ${image} }
-\\end{column}
-
-\\end{columns}
-
-\\end{frame}
-`;
-    return(slide);
 }
 
 //Start server

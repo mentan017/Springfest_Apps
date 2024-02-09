@@ -27,15 +27,13 @@ async function BatchCreateTShirts(){
         var formData = new FormData();
         var blob = file.slice(0, file.size, file.type);
         formData.append('files', new File([blob], file.name, {type: file.type}));
-        var response = await fetch(`/batch-create-t-shirt`, {
+        var response = await fetch(`/create-t-shirt-presentation`, {
             method: "POST",
             body: formData
         });
         if(response.status == 200){
-            var responseData = await response.json();
-            var uuid = responseData.UUID;
             document.getElementById("t-shirt-img").setAttribute("src", `/images/zip.jpg`);
-            document.getElementById("download-btn-link").setAttribute("href", `/download/${uuid}.zip`)
+            document.getElementById("download-btn-link").setAttribute("href", `/download/T_Shirt_Order_Springfest.pdf`)
             document.getElementById("img-container").style.display = "grid";
         }else{
             window.alert("An error occured in the server");
