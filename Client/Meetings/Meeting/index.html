@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Common/reset.css">
+    <link rel="stylesheet" href="/Common/navigation.css">
+    <link rel="stylesheet" href="/Meetings/Meeting/style.css">
+    <script type="text/javascript" src="/Meetings/Meeting/script.js" defer></script>
+    <title>Meeting</title>
+</head>
+<body>
+    <div class="navigation-container">
+        <div class="nav-logo-container"><img alt="Springfest 2024 Logo" src="/images/logo_black_no_bg.png"></div>
+        <a href="/" class="nav-element">
+            <div>Home</div>
+        </a>
+        <a href="/meetings" class="nav-element">
+            <div>Meetings</div>
+        </a>
+        <a href="/teams" class="nav-element">
+            <div>Teams</div>
+        </a>
+        <a href="/tasks" class="nav-element">
+            <div>Tasks</div>
+        </a>
+        <a href="/tools" class="nav-element">
+            <div>Tools</div>
+        </a>
+        <a href="/more" class="nav-element">
+            <div>More</div>
+        </a>
+        <a href="/help" class="nav-element">
+            <div style="border: none;">Help</div>
+        </a>
+    </div>
+    <div class="content-container">
+        <div class="meeting-data">
+            <div>
+                <h1 id="meeting-type">Management Meeting</h1>
+                <input id="meeting-type-input" type="text">
+            </div>
+            <div>
+                <p id="meeting-date">January 22 2024, P7</p>                
+                <input id="meeting-date-input" type="text">
+            </div>
+            <div>
+                <p id="meeting-room">C214</p>
+                <input id="meeting-room-input" type="text">
+            </div>
+        </div>
+        <div class="discussion-point-title">
+            <h2>Discussion Points</h2>
+            <div id="add-discussion-point-btn">+ Add</div>
+        </div>
+        <div id="discussion-points-container">
+            <div>
+                <p>Description</p>
+                <p>Progress</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
