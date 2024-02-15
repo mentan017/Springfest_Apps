@@ -3,6 +3,7 @@ const express = require('express');
 const excelToJson = require('convert-excel-to-json');
 const formidable = require('formidable');
 const fs = require('fs');
+const handleBars = require('handlebars');
 const { execSync } = require('child_process');
 const {v4: uuidv4} = require('uuid');
 require('dotenv').config();
@@ -117,41 +118,18 @@ async function CreateSlideNew(teamData, index){
     var TShirtFile = `t-shirt-${teamData.colorName}-${(roles[index].split(" ").join("-")).toLowerCase()}.png`;
     //Create the T-shirt
     await CreateTShirtImage(teamData.hexValue, teamData.colorName, teamData.textColor, textVariables[index], (roles[index].split(" ").join("-")).toLowerCase());
-    //Create the slide
+    //Create the slide from template
     var text = textVariables[index].split("&").join("\\&");
-    var slide = `
-    \\begin{frame}
-    
-    \\frametitle{\\textbf{${teamName} ${roles[index]}}}
-    
-    \\begin{columns}[T]
-    
-    \\begin{column}{0.40\\textwidth}
-    
-    \\textbf{Color:} ${teamData.originalColorName}\\\\
-    \\textbf{Text Color:} ${teamData.textColor}\\\\
-    \\textbf{Back Text:} ${text}\\\\
-    \\textbf{Amount:} \\\\
-    \\begin{itemize}
-    \\item[-] XXS:
-    \\item[-] XS:
-    \\item[-] S:
-    \\item[-] M:
-    \\item[-] L:
-    \\item[-] XL:
-    \\item[-] XXL:
-    \\item[-] 3XL:
-    \\end{itemize}
-    
-    \\end{column}
-    
-    \\begin{column}{0.50\\textwidth}
-    \\includegraphics[width=\\textwidth]{ ${TShirtFile} }
-    \\end{column}
-    
-    \\end{columns}
-    
-    \\end{frame}`;
+    var slideSource = fs.readFileSync('./resources/t-shirt-presentation-slide-template.txt', 'utf8');
+    var slideTemplate = handleBars.compile(slideSource);
+    var slide = slideTemplate({
+        teamName: teamName,
+        role: roles[index],
+        originalColorName: teamData.originalColorName,
+        textColor: teamData.textColor,
+        text: text,
+        TShirtFile: TShirtFile
+    });
     return slide;
 }
 async function CreatePresentation(slides, newFilePath){
@@ -165,7 +143,7 @@ async function CreatePresentation(slides, newFilePath){
     %\\usecolortheme{whale}
     
     \\title{T-Shirts Order for \\\\European School of Brussels III}
-    \\date{2024}
+    \\date{${process.env.YEAR}}
     
     \\begin{document}
     \\maketitle
@@ -174,6 +152,7 @@ async function CreatePresentation(slides, newFilePath){
     //Create the presentation file
     execSync(`cd ./Client/files/ ; touch presentation.tex`);
     fs.writeFileSync('./Client/files/presentation.tex', presentation);
+    //Remove all the temporary files used
     execSync(`cd ./Client/files/ ; pdflatex presentation.tex ; mv presentation.pdf T_Shirt_Order_Springfest.pdf; rm t-shirt*.png presentation.*`);
     execSync(`rm ${newFilePath}`);
     return true;
