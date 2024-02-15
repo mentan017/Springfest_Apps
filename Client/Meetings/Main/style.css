@@ -1,0 +1,48 @@
+.title-container{
+    max-width: 86%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 2rem 0;
+    margin: 0 auto;
+}
+h1{
+    text-align: center;
+    font-size: 4.5rem;
+}
+#new-meeting-btn{
+    width: max-content;
+    font-size: 2.5rem;
+    border-radius: 10px;
+    border: solid 3px black;
+    padding: 1rem 2rem;
+    margin: auto;
+    cursor: pointer;
+}
+#new-meeting-btn:hover{
+    color: blue;
+}
+#meetings-container{
+    max-width: 86%;
+    border-radius: 10px;
+    border: solid 5px black;
+    margin: 2rem auto;
+}
+#meetings-container > div{
+    font-size: 1.5rem;
+    display: grid;
+    grid-template-columns: 3fr 3fr 1fr;
+    border-bottom: solid 2px black;
+}
+#meetings-container > div > p{
+    text-align: center;
+    padding: 0.5rem;
+}
+#meetings-container > div > p:nth-child(even){
+    border-left: solid 2px black;
+    border-right: solid 2px black;
+}
+.meeting:hover{
+    color: blue;
+    cursor: pointer;
+}
