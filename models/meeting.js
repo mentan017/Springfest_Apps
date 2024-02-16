@@ -21,6 +21,10 @@ const MeetingSchema = new mongoose.Schema({
             type: Number
         }
     }],
+    Notes:{
+        type: String,
+        default: ""
+    },
     UUID:{
         type: String
     },

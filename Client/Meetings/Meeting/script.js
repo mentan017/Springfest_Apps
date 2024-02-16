@@ -36,6 +36,8 @@ async function FetchMeeting(){
         for(var i=0; i<responseData.DiscussionPoints.length; i++){
             AddDiscussionPoint(i, responseData.DiscussionPoints[i].Point, responseData.DiscussionPoints[i].Progress);
         }
+        document.getElementById("notes").innerHTML = responseData.Notes;
+        UpdateNotes(responseData.Notes);
     }else{
         window.alert("An error occured in the server, please try again later.");
     }
@@ -113,4 +115,17 @@ async function UpdateDiscussionPoint(index, pointElement){
         headers: {"Content-type": "application/json"},
         body: JSON.stringify({UUID: UUID, Index: index, DiscussionPoint: DiscussionPoint, Progress: Progress})
     });
+}
+async function UpdateNotes(previousNotes){
+    var URL = (document.location.href).split('/');
+    var UUID = URL[URL.length-1];
+    var notes = document.getElementById("notes").value;
+    if(previousNotes != notes){
+        var response = await fetch('/meetings/update-notes', {
+            method: "PUT",
+            headers: {"Content-type": "application/json"},
+            body: JSON.stringify({UUID: UUID, Notes: notes})
+        });
+    }
+    setTimeout(UpdateNotes, 1000, notes);
 }

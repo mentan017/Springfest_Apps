@@ -108,7 +108,7 @@ router.put('/new-discussion-point', async function(req, res){
         console.log(e);
         res.sendStatus(500);
     }
-})
+});
 router.put('/update-discussion-point', async function(req, res){
     try{
         var data = req.body;
@@ -124,6 +124,16 @@ router.put('/update-discussion-point', async function(req, res){
         res.sendStatus(500);
     }
 });
+router.put('/update-notes', async function(req, res){
+    try{
+        var data = req.body;
+        var Meeting = await MeetingModel.findOneAndUpdate({UUID: data.UUID}, {Notes: data.Notes});
+        res.sendStatus(200);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+})
 
 //Additional functions
 
