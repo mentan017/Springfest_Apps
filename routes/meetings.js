@@ -25,7 +25,7 @@ router.get('/', function(req, res){
 });
 router.get('/:uuid', function(req, res){
     res.status(200).sendFile(`${homeDir}/Client/Meetings/Meeting/index.html`);
-})
+});
 
 //POST routes
 router.post('/get-meetings', async function(req, res){

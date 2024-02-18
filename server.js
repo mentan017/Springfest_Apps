@@ -7,6 +7,7 @@ require('dotenv').config();
 
 //Import routes
 const MeetingsRouter = require('./routes/meetings.js');
+const TeamsRouter = require('./routes/teams.js');
 const ToolsRouter = require('./routes/tools.js');
 
 //Import the SSL certificate
@@ -46,6 +47,7 @@ app.get('/download/:file', function(req, res){
 
 //Connect routes
 app.use('/meetings', MeetingsRouter);
+app.use('/teams', TeamsRouter);
 app.use('/tools', ToolsRouter);
 
 //Start server

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const MeetingSchema = new mongoose.Schema({
     MeetingType:{
@@ -29,7 +30,8 @@ const MeetingSchema = new mongoose.Schema({
         type: String
     },
     SpringfestYear:{
-        type: Number
+        type: Number,
+        default: process.env.YEAR
     }
 });
 

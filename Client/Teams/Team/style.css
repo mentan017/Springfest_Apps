@@ -1,0 +1,61 @@
+h1{
+    font-size: 4.5rem;
+    text-align: center;
+    padding: 2rem;
+}
+h2{
+    font-size: 2rem;
+}
+.summary-heading{
+    max-width: 86%;
+    margin: 0.5rem auto;
+}
+#team-summary{
+    max-width: calc(86% - 2rem);
+    margin: 0.5rem auto;
+    font-size: 1.5rem;
+}
+#team-summary p{
+    padding: 0.1rem;
+}
+.members-title-container{
+    width: 86%;
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    align-items: center;
+    margin: 1rem auto;
+}
+#add-member-btn{
+    font-size: 1.6rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: solid 3px black;
+    cursor: pointer;
+}
+#add-member-btn:hover{
+    color: blue;
+}
+#members-container{
+    font-size: 1.5rem;
+    margin: 2rem 7%;
+    border-radius: 10px;
+    border: solid 5px black;
+}
+#members-container > div{
+    display: grid;
+    grid-template-columns: 1fr 3fr 4fr 1fr;
+    column-gap: 10px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-bottom: solid 2px black;
+}
+#members-container > div > *{
+    padding: 0.5rem;
+    min-width: 100px;
+    min-height: 1rem;
+    cursor: pointer;
+}
+#members-container > div > *:nth-child(1), #members-container > div > *:nth-child(2), #members-container > div > *:nth-child(3){
+    border-right: solid 2px black;
+}

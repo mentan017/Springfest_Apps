@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/Common/reset.css">
     <link rel="stylesheet" href="/Common/navigation.css">
-    <link rel="stylesheet" href="/Meetings/Meeting/style.css">
-    <script type="text/javascript" src="/Meetings/Meeting/script.js" defer></script>
-    <title>Meeting</title>
+    <link rel="stylesheet" href="/Teams/Main/style.css">
+    <script type="text/javascript" src="/Teams/Main/script.js" defer></script>
+    <title>Springfest Teams</title>
 </head>
 <body>
     <div class="navigation-container">
@@ -35,35 +35,19 @@
         </a>
     </div>
     <div class="content-container">
-        <div class="meeting-data">
-            <div>
-                <h1 id="meeting-type"></h1>
-                <input id="meeting-type-input" type="text">
-            </div>
-            <div>
-                <p id="meeting-date"></p>                
-                <input id="meeting-date-input" type="text">
-            </div>
-            <div>
-                <p id="meeting-room"></p>
-                <input id="meeting-room-input" type="text">
+        <div class="title-container">
+            <h1>Teams</h1>
+            <div class="new-team-form">
+                <input id="team-name-input" type="text" placeholder="Team Name">
+                <div id="new-team-btn">+ New Team</div>
             </div>
         </div>
-        <div class="discussion-point-title">
-            <h2>Discussion Points</h2>
-            <div id="add-discussion-point-btn">+ Add</div>
-        </div>
-        <div id="discussion-points-container">
+        <div id="teams-container">
             <div>
-                <p>Description</p>
-                <p>Progress</p>
+                <p>Team Name</p>
+                <p>Managers</p>
+                <p>Members</p>
             </div>
-        </div>
-        <div class="notes-container">
-            <h2>Notes</h2>
-            <textarea id="notes">
-
-            </textarea>
         </div>
     </div>
 </body>
