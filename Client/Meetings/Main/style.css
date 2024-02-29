@@ -1,0 +1,114 @@
+.title-container{
+    max-width: 86%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 2rem 0;
+    margin: 0 auto;
+}
+h1{
+    text-align: center;
+    font-size: 4.5rem;
+}
+#new-meeting-btn{
+    width: max-content;
+    font-size: 2.5rem;
+    border-radius: 10px;
+    border: solid 3px black;
+    padding: 1rem 2rem;
+    margin: auto;
+    cursor: pointer;
+}
+#new-meeting-btn:hover{
+    color: blue;
+}
+#meetings-container{
+    max-width: 86%;
+    border-radius: 10px;
+    border: solid 5px black;
+    margin: 2rem auto;
+}
+#meetings-container > div{
+    font-size: 1.5rem;
+    display: grid;
+    grid-template-columns: 3fr 3fr 1fr;
+    align-items: center;
+    border-bottom: solid 2px black;
+}
+#meetings-container > div > p{
+    text-align: center;
+    padding: 0.5rem;
+}
+#meetings-container > div > p:nth-child(even){
+    border-left: solid 2px black;
+    border-right: solid 2px black;
+}
+.meeting:hover{
+    color: blue;
+    cursor: pointer;
+}
+#new-meeting-container{
+    top: 0px;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+#new-meeting-container > div{
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+}
+h2{
+    font-size: 3rem;
+    margin: 1rem;
+}
+#new-meeting-container p{
+    font-size: 1.5rem;
+    padding: 0.5rem;
+}
+input, select{
+    font-size: 1.3rem;
+    width: calc(100% - 2rem);
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    border: solid 1px black;
+    margin: 0.5rem;
+}
+#custom-meeting-type{
+    width: calc(100% - 3rem);
+}
+#date-input{
+    width: calc(70% - 2rem);
+}
+#period-input{
+    width: calc(30% - 2rem);
+}
+.action-btns{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    margin: 1rem 0.5rem;
+}
+.action-btns > div{
+    font-size: 1.6rem;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    border: solid 2px black;
+    cursor: pointer;
+}
+#cancel-btn{
+    background-color: rgba(255, 0, 0, 0.3);
+    color: red;
+    border-color: red;
+}
+#submit-btn{
+    background-color: rgba(0, 255, 0, 0.3);
+    color: green;
+    border-color: green;
+}

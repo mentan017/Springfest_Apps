@@ -1,0 +1,57 @@
+.title-container{
+    max-width: 86%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    align-items: center;
+    padding: 2rem 0;
+    margin: 0 auto;
+}
+h1{
+    text-align: center;
+    font-size: 4.5rem;
+}
+.new-team-form{
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    column-gap: 10px;
+    align-items: center;
+}
+#team-name-input{
+    font-size: 1.8rem;
+    padding: 0.7rem;
+    border-radius: 10px;
+    border: solid 3px black;
+}
+#new-team-btn{
+    font-size: 2rem;
+    padding: 0.7rem 1.3rem;
+    border-radius: 10px;
+    border: solid 3px black;
+    cursor: pointer;
+}
+#teams-container{
+    max-width: 86%;
+    border-radius: 10px;
+    border: solid 5px black;
+    margin: 2rem auto;
+}
+#teams-container > div{
+    font-size: 1.5rem;
+    display: grid;
+    grid-template-columns: 3fr 3fr 1fr;
+    align-items: center;
+    border-bottom: solid 2px black;
+}
+#teams-container > div > p{
+    text-align: center;
+    padding: 0.5rem;
+}
+#teams-container > div > p:nth-child(even){
+    border-left: solid 2px black;
+    border-right: solid 2px black;
+}
+.team:hover{
+    color: blue;
+    cursor: pointer;
+}

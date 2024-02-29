@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Common/reset.css">
+    <link rel="stylesheet" href="/Common/navigation.css">
+    <link rel="stylesheet" href="/Meetings/Main/style.css">
+    <script type="text/javascript" src="/Meetings/Main/script.js" defer></script>
+    <title>Springfest Meetings</title>
+</head>
+<body>
+    <div class="navigation-container">
+        <div class="nav-logo-container"><img alt="Springfest 2024 Logo" src="/images/logo_black_no_bg.png"></div>
+        <a href="/" class="nav-element">
+            <div>Home</div>
+        </a>
+        <a href="/meetings" class="nav-element">
+            <div>Meetings</div>
+        </a>
+        <a href="/teams" class="nav-element">
+            <div>Teams</div>
+        </a>
+        <a href="/tasks" class="nav-element">
+            <div>Tasks</div>
+        </a>
+        <a href="/tools" class="nav-element">
+            <div>Tools</div>
+        </a>
+        <a href="/more" class="nav-element">
+            <div>More</div>
+        </a>
+        <a href="/help" class="nav-element">
+            <div style="border: none;">Help</div>
+        </a>
+    </div>
+    <div class="content-container">
+        <div class="title-container">
+            <h1>Meetings</h1>
+            <div id="new-meeting-btn">+ New Meeting</div>
+        </div>
+        <div id="meetings-container">
+            <div>
+                <p>Meeting Type</p>
+                <p>Date</p>
+                <p>Room</p>
+            </div>
+        </div>
+    </div>
+    <div id="new-meeting-container" style="display: none;">
+        <div>
+            <h2>Schedule New Meeting</h2>
+            <div class="forms-container">
+                <p>Meeting Type:</p>
+                <select id="meeting-type-input">
+                    <option value="Core Team Meeting">Core Team Meeting</option>
+                    <option value="Managers Meeting">Managers Meeting</option>
+                    <option value="Management Meeting">Management Meeting</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <br>
+                <input id="custom-meeting-type" type="text" placeholder="Input a custom meeting type" style="display: none;">
+                <p>Date and Time:</p>
+                <input id="date-input" type="date">
+                <select id="period-input">
+                    <option value="P00">P00</option>
+                    <option value="P01">P01</option>
+                    <option value="P02">P02</option>
+                    <option value="P03">P03</option>
+                    <option value="P04">P04</option>
+                    <option value="P05">P05</option>
+                    <option value="P06">P06</option>
+                    <option value="P07">P07</option>
+                    <option value="P08">P08</option>
+                    <option value="P09">P09</option>
+                    <option value="P10">P10</option>
+                    <option value="P11">P11</option>
+                </select>
+                <p>Room:</p>
+                <input id="room-input" type="text">
+                <div class="action-btns">
+                    <div id="cancel-btn">Cancel</div>
+                    <div id="submit-btn">Submit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

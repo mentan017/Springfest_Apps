@@ -1,0 +1,26 @@
+.navigation-container{
+    position: fixed;
+    top: 0px;
+    height: 100vh;
+    border-right: black 3px solid;
+}
+.nav-logo-container{
+    padding: 2rem 1rem 2rem 1rem;
+}
+.nav-logo-container img{
+    width: 200px;
+}
+.nav-element{
+    color: black;
+    width: 100%;
+    text-decoration: none;
+}
+.nav-element > div{
+    font-size: 2rem;
+    text-align: center;
+    padding: 1.5rem;
+    border-bottom: solid black 2px;
+}
+.content-container{
+    margin-left: calc(203px + 5rem);
+}
