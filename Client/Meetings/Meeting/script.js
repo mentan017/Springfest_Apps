@@ -3,7 +3,7 @@ window.onload = FetchMeeting();
 window.addEventListener('click', function(e){
     var ActiveElements = document.getElementsByClassName("active");
     for(var i=0; i<ActiveElements.length; i++){ if(!ActiveElements[i].contains(e.target)) ActiveElements[i].classList.toggle("active");}
-})
+});
 
 document.getElementById("meeting-type").addEventListener("click", function(e){
     this.parentElement.classList.toggle("active");

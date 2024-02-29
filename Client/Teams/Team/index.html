@@ -35,7 +35,7 @@
         </a>
     </div>
     <div class="content-container">
-        <h1>Team: Steward</h1>
+        <h1 id="team-name">Team: Steward</h1>
         <h2 class="summary-heading">Team Summary:</h2>
         <div id="team-summary">
             <p>Managers: 2</p>
@@ -55,22 +55,51 @@
                 <p>Email</p>
                 <p>T-Shirt Size</p>
             </div>
-            <div>
-                <p>Manager</p>
-                <p>Adrian Bernabeu</p>
-                <p>bernabad@student.eursc.eu</p>
-                <p>XL</p>
-            </div>
-            <div>
-                <p>Member</p>
-                <p>Timothe Mesnard</p>
-                <p>mesnarti@student.eursc.eu</p>
-                <p>M</p>
-            </div>
         </div>
     </div>
-    <div>
-        
+    <div id="new-member-supercontainer" style="display: none;">
+        <div class="new-member-container">
+            <h3>Add a new member</h3>
+            <div class="new-member-form">
+                <div class="personal-info-inputs">
+                    <p>Full name:</p>
+                    <input id="name-input" type="text" placeholder="Full name">
+                    <p>Email:</p>
+                    <input id="email-input" type="email" placeholder="Email">
+                </div>
+                <div class="role-tshirt-inputs">
+                    <div>
+                        <p>Role:</p>
+                        <select id="role-input">
+                            <option value="manager">Manager</option>
+                            <option value="team-leader">Team Leader</option>
+                            <option value="team-member">Team Member</option>
+                            <option value="coach">Coach</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p>T-Shirt Size:</p>
+                        <select id="tshirtsize-input">
+                            <option value="XXS">XXS</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="batch-member-upload-container">
+                <h3>Batch Upload</h3>
+                <div><input id="team-members-file" type="file" accept=".xlsx"></div>
+            </div>
+            <div class="actions-container">
+                <div id="cancel-btn">Cancel</div>
+                <div id="submit-btn">Submit</div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

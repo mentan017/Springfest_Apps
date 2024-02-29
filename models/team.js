@@ -9,22 +9,16 @@ const TeamSchema = new mongoose.Schema({
         type: String
     },
     Members:[{
-        Name:{
-            type: String
-        },
-        Email:{
-            type: String
+        ID:{
+            type: mongoose.Schema.Types.ObjectId
         },
         Role:{
             type: String
         },
-        Phone:{
-            type: String
-        },
-        TShirtSize:{
-            type: String
-        }
     }],
+    TShirtColor:{
+        type: String,
+    },
     SpringfestYear:{
         type: Number,
         default: process.env.YEAR
