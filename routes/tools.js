@@ -87,7 +87,7 @@ async function CreatePresentation(slides, newFilePath){
     return true;
 }
 async function CreateSlideNew(teamData, index){
-    var roles = ['Manager', 'Member', 'Team Leader', 'Coach'];
+    var roles = ['Manager', 'Member', 'Team Leader', 'Coach', 'Designer'];
     var textVariables = [teamData.textManagers, teamData.textTeam, teamData.textTeamLeader, teamData.textCoach];
     var teamName = (teamData.teamName).split("&").join("\\&");
     var TShirtFile = `t-shirt-${teamData.colorName}-${(roles[index].split(" ").join("-")).toLowerCase()}.png`;

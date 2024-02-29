@@ -18,10 +18,11 @@ function CloseNewMemberPrompt(){
 }
 async function AddNewMember(){
     //Check if it is a batch upload or an individual upload
+    var name = document.getElementById("name-input").value;    
     var file = document.getElementById("team-members-file").files;
-    if(!file.length){ //Individual upload
+    if(name){ //Individual upload
         AddNewIndividualMember();
-    }else{
+    }else if(file.length){
         AddNewBatchMembers();
     }
 }
@@ -55,7 +56,23 @@ async function AddNewIndividualMember(){
     }
 }
 async function AddNewBatchMembers(){
-
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var files = document.getElementById("team-members-file").files;
+    if(files.length > 0){
+        var file = files[0];
+        var formData = new FormData();
+        var blob = file.slice(0, file.size, file.type);
+        formData.append('files', new File([blob], file.name, {type: file.type}));
+        var response = await fetch(`/teams/temp-upload`, {
+            method: "PUT",
+            body: formData
+        });
+        if(response.status == 200){
+            CloseNewMemberPrompt();
+            window.location.reload();
+        }
+    }
 }
 function AddNewMemberElement(data){
     var memberContainer = document.createElement('div');
@@ -66,7 +83,8 @@ function AddNewMemberElement(data){
         <option value="team-leader">Team Leader</option>
         <option value="team-member">Team Member</option>
         <option value="coach">Coach</option>
-    </select>
+        <option value="designer">Designer</option>
+        </select>
     <p>${data.Fullname}</p>
     <p>${data.Email}</p>
     <p>${data.TShirtSize}</p>`;
@@ -88,6 +106,7 @@ async function FetchTeamData(){
         <p>Team Leaders: ${responseData.TeamLeaders}</p>
         <p>Members: ${responseData.TeamMembers}</p>
         <p>Coaches: ${responseData.Coaches}</p>
+        <p>Designers: ${responseData.Designers}</p>
         <div class="tshirtcolor"><p>T-Shirt color: </p><p id="tshirtcolor-text">${responseData.TShirtColor}</p><input style="display: none;" id="tshirtcolor-input" type="text" value="${responseData.TShirtColor}">`;
     }
     document.getElementById("tshirtcolor-text").addEventListener("click", function(e){
