@@ -266,10 +266,11 @@ router.put('/temp-upload', function(req, res){
                         for(var j=0; j<memberData.Teams.length; j++){
                             if(memberData.Teams[j] == "Flag Ceremony") memberData.Teams[j] = "Opening Show";
                             var team = await TeamModel.findOne({Name: memberData.Teams[j]});
+                            if(!team) console.log(memberData);
                             SaveNewMember(memberData, team.UUID)
                         }
                     }
-                    fs.unlinkSync(newFilePath)
+                    fs.unlinkSync(newFilePath);
                 }
                 res.sendStatus(200);
             }

@@ -1,4 +1,5 @@
 //Import node modules
+const excel = require('excel4node');
 const express = require('express');
 const fs = require('fs');
 const https = require('https');
@@ -9,6 +10,10 @@ require('dotenv').config();
 const MeetingsRouter = require('./routes/meetings.js');
 const TeamsRouter = require('./routes/teams.js');
 const ToolsRouter = require('./routes/tools.js');
+
+//Import MongoDB models
+const MemberModel = require('./models/member.js');
+const TeamModel = require('./models/team.js');
 
 //Import the SSL certificate
 const sslOptions = {
@@ -41,6 +46,43 @@ app.get('/download/:file', function(req, res){
         console.log(e);
         res.sendStatus(500);
     }
+});
+app.get('/create-teams-excels', async function(req, res){
+    var wb = new excel.Workbook();
+    var teams = await TeamModel.find({});
+    var roles = ['manager', 'team-leader', 'team-member', 'coach', 'designer'];
+    for(var i=0; i<teams.length; i++){
+        var members = [];
+        var ws = wb.addWorksheet(teams[i].Name);
+        ws.cell(1, 1).string("Role");
+        ws.cell(1, 2).string("Name");
+        ws.cell(1, 3).string("Email");
+        ws.cell(1, 4).string("T-Shirt Size");
+        for(var j=0; j<roles.length; j++){
+            for(var k=0; k<teams[i].Members.length; k++){
+                if(teams[i].Members[k].Role == roles[j]){
+                    var member = await MemberModel.findById(teams[i].Members[k].ID);
+                    members.push({
+                        Fullname: member.Fullname,
+                        Email: member.Email,
+                        TShirtSize: member.TShirtSize,
+                        Role: (roles[j]).split("-").join(" ")
+                    });
+                }
+            }
+        }
+        for(var j=0; j<members.length; j++){
+            ws.cell(2+j, 1).string(members[j].Role);
+            ws.cell(2+j, 2).string(members[j].Fullname);
+            ws.cell(2+j, 3).string(members[j].Email);
+            ws.cell(2+j, 4).string(members[j].TShirtSize);
+        }
+    }
+    wb.write('./data/sf24_teams.xlsx');
+    /*var ws = wb.addWorksheet('Sheet 1');
+    ws.cell(1, 2).string("Role");
+    wb.write('./data/excel_test.xlsx');*/
+    res.sendStatus(200);
 });
 
 //POST routes
