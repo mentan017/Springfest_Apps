@@ -19,6 +19,27 @@ const TeamSchema = new mongoose.Schema({
     TShirtColor:{
         type: String,
     },
+    TShirtHEX:{
+        type: String,
+    },
+    TShirtTextColor:{
+        type: String
+    },
+    ManagersText:{
+        type: String
+    },
+    TeamLeadersText:{
+        type: String
+    },
+    TeamMembersText:{
+        type: String
+    },
+    CoachesText:{
+        type: String
+    },
+    DesignersText:{
+        type: String
+    },
     SpringfestYear:{
         type: Number,
         default: process.env.YEAR

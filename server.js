@@ -79,12 +79,23 @@ app.get('/create-teams-excels', async function(req, res){
         }
     }
     wb.write('./data/sf24_teams.xlsx');
-    /*var ws = wb.addWorksheet('Sheet 1');
-    ws.cell(1, 2).string("Role");
-    wb.write('./data/excel_test.xlsx');*/
     res.sendStatus(200);
 });
-
+app.get('/duplicates', async function(req, res){
+    var members = await MemberModel.find({});
+    var indivEmail = [];
+    var dupeEmail = [];
+    for(var i=0; i<members.length; i++){
+        if(indivEmail.indexOf(members[i].Email) == -1){
+            indivEmail.push(members[i].Email);
+        }else{
+            dupeEmail.push(members[i].Email);
+            //await MemberModel.findByIdAndDelete(members[i]._id);
+        }
+    }
+    console.log(dupeEmail);
+    res.sendStatus(200);
+});
 //POST routes
 
 //Connect routes

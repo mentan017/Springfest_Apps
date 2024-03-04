@@ -9,6 +9,17 @@ window.addEventListener('click', function(e){
 document.getElementById("add-member-btn").addEventListener("click", OpenNewMemberPrompt);
 document.getElementById("cancel-btn").addEventListener("click", CloseNewMemberPrompt);
 document.getElementById("submit-btn").addEventListener("click", AddNewMember);
+document.getElementById("team-tshirt-color-input").addEventListener("input", function(e){
+    document.getElementById("tshirtcolor-input").value = this.value;
+    ChangeTShirtColor();
+});
+document.getElementById("tshirt-hex-input").addEventListener("input", ChangeTShirtHEX);
+document.getElementById("text-color-input").addEventListener("input", ChangeTextColor);
+document.getElementById("managers-text-input").addEventListener("input", ChangeManagerText);
+document.getElementById("team-leaders-text-input").addEventListener("input", ChangeTeamLeaderText);
+document.getElementById("team-members-text-input").addEventListener("input", ChangeTeamMemberText);
+document.getElementById("coaches-text-input").addEventListener("input", ChangeCoachText);
+document.getElementById("designers-text-input").addEventListener("input", ChangeDesignerText);
 
 function OpenNewMemberPrompt(){
     document.getElementById("new-member-supercontainer").style.display = "grid";
@@ -64,10 +75,11 @@ async function AddNewBatchMembers(){
         var formData = new FormData();
         var blob = file.slice(0, file.size, file.type);
         formData.append('files', new File([blob], file.name, {type: file.type}));
-        var response = await fetch(`/teams/temp-upload`, {
+        var response = await fetch('/teams/temp-upload', {method: "PUT", body: formData});
+        /*var response = await fetch(`/teams/add-members-batch/${teamUUID}`, {
             method: "PUT",
             body: formData
-        });
+        });*/
         if(response.status == 200){
             CloseNewMemberPrompt();
             window.location.reload();
@@ -108,6 +120,21 @@ async function FetchTeamData(){
         <p>Coaches: ${responseData.Coaches}</p>
         <p>Designers: ${responseData.Designers}</p>
         <div class="tshirtcolor"><p>T-Shirt color: </p><p id="tshirtcolor-text">${responseData.TShirtColor}</p><input style="display: none;" id="tshirtcolor-input" type="text" value="${responseData.TShirtColor}">`;
+        document.getElementById("team-tshirt-color-input").value = responseData.TShirtColor;
+        if(responseData.TShirtHEX) document.getElementById("tshirt-hex-input").value = responseData.TShirtHEX;
+        else document.getElementById("tshirt-hex-input").setAttribute("placeholder", `Default: #000000`);
+        if(responseData.TShirtTextColor) document.getElementById("text-color-input").value = responseData.TShirtTextColor;
+        else document.getElementById("text-color-input").setAttribute("placeholder", `Default: black`);
+        if(responseData.ManagersText) document.getElementById("managers-text-input").value = responseData.ManagersText;
+        else document.getElementById("managers-text-input").setAttribute("placeholder", `Default: ${responseData.TeamName} Manager`);
+        if(responseData.TeamLeadersText) document.getElementById("team-leaders-text-input").value = responseData.TeamLeadersText;
+        else document.getElementById("team-leaders-text-input").setAttribute("placeholder", `Default: ${responseData.TeamName} Team Leader`);
+        if(responseData.TeamMembersText) document.getElementById("team-members-text-input").value = responseData.TeamMembersText;
+        else document.getElementById("team-members-text-input").setAttribute("placeholder", `Default: ${responseData.TeamName}`);
+        if(responseData.CoachesText) document.getElementById("coaches-text-input").value = responseData.CoachesText;
+        else document.getElementById("coaches-text-input").setAttribute("placeholder", `Default: ${responseData.TeamName} Coach`);
+        if(responseData.DesignersText) document.getElementById("designers-text-input").value = responseData.DesignersText;
+        else document.getElementById("designers-text-input").setAttribute("placeholder", `Default: ${responseData.TeamName} Designer`);
     }
     document.getElementById("tshirtcolor-text").addEventListener("click", function(e){
         this.parentElement.classList.toggle("active");
@@ -160,5 +187,97 @@ function ListenRoles(){
                 window.alert("An error occured in the server, please try again later.");
             }
         });
+    }
+}
+async function ChangeTShirtHEX(){
+    console.log("test");
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var HEXValue = document.getElementById("tshirt-hex-input").value;
+    var response = await fetch(`/teams/tshirt-hex/${teamUUID}`,{
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({HEXValue: HEXValue})
+    });
+    if(response.status != 200){
+        window.alert("An error occured in the server, please try again later.");
+    }
+}
+async function ChangeTextColor(){
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var TextColor = (document.getElementById("text-color-input").value).toLowerCase();
+    var response = await fetch(`/teams/tshirt-text-color/${teamUUID}`,{
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({TextColor: TextColor})
+    });
+    if(response.status != 200){
+        window.alert("An error occured in the server, please try again later.");
+    }
+}
+async function ChangeManagerText(){
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var ManagersText = document.getElementById("managers-text-input").value;
+    var response = await fetch(`/teams/managers-text/${teamUUID}`,{
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({ManagersText: ManagersText})
+    });
+    if(response.status != 200){
+        window.alert("An error occured in the server, please try again later.");
+    }
+}
+async function ChangeTeamLeaderText(){
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var TeamLeadersText = document.getElementById("team-leaders-text-input").value;
+    var response = await fetch(`/teams/team-leaders-text/${teamUUID}`,{
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({TeamLeadersText: TeamLeadersText})
+    });
+    if(response.status != 200){
+        window.alert("An error occured in the server, please try again later.");
+    }
+}
+async function ChangeTeamMemberText(){
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var TeamMembersText = document.getElementById("team-members-text-input").value;
+    var response = await fetch(`/teams/team-members-text/${teamUUID}`,{
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({TeamMembersText: TeamMembersText})
+    });
+    if(response.status != 200){
+        window.alert("An error occured in the server, please try again later.");
+    }
+}
+async function ChangeCoachText(){
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var CoachesText = document.getElementById("coaches-text-input").value;
+    var response = await fetch(`/teams/coaches-text/${teamUUID}`,{
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({CoachesText: CoachesText})
+    });
+    if(response.status != 200){
+        window.alert("An error occured in the server, please try again later.");
+    }
+}
+async function ChangeDesignerText(){
+    var URL = (document.location.href).split('/');
+    var teamUUID = URL[URL.length-1];
+    var DesignersText = document.getElementById("designers-text-input").value;
+    var response = await fetch(`/teams/designers-text/${teamUUID}`,{
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({DesignersText: DesignersText})
+    });
+    if(response.status != 200){
+        window.alert("An error occured in the server, please try again later.");
     }
 }

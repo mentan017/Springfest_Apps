@@ -84,7 +84,14 @@ router.post('/team-data/:teamuuid', async function(req, res){
             TeamMembers: MembersPerRole[2],
             Coaches: MembersPerRole[3],
             Designers: MembersPerRole[4],
-            TShirtColor: team.TShirtColor || "Unknown"
+            TShirtColor: team.TShirtColor || "Unknown",
+            TShirtHEX: team.TShirtHEX,
+            TShirtTextColor: team.TShirtTextColor,
+            ManagersText: team.ManagersText,
+            TeamLeadersText: team.TeamLeadersText,
+            TeamMembersText: team.TeamMembersText,
+            CoachesText: team.CoachesText,
+            DesignersText: team.DesignersText
         });
     }catch(e){
         console.log(e);
@@ -267,7 +274,7 @@ router.put('/temp-upload', function(req, res){
                             if(memberData.Teams[j] == "Flag Ceremony") memberData.Teams[j] = "Opening Show";
                             var team = await TeamModel.findOne({Name: memberData.Teams[j]});
                             if(!team) console.log(memberData);
-                            SaveNewMember(memberData, team.UUID)
+                            SaveNewMember(memberData, team.UUID);
                         }
                     }
                     fs.unlinkSync(newFilePath);
@@ -275,6 +282,69 @@ router.put('/temp-upload', function(req, res){
                 res.sendStatus(200);
             }
         });
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.put('/tshirt-hex/:teamUUID', async function(req, res){
+    try{
+        var team = await TeamModel.findOneAndUpdate({UUID: req.params.teamUUID}, {TShirtHEX: req.body.HEXValue});
+        res.sendStatus(200);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.put('/tshirt-text-color/:teamUUID', async function(req, res){
+    try{
+        var team = await TeamModel.findOneAndUpdate({UUID: req.params.teamUUID}, {TShirtTextColor: req.body.TextColor});
+        res.sendStatus(200);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.put('/managers-text/:teamUUID', async function(req, res){
+    try{
+        var team = await TeamModel.findOneAndUpdate({UUID: req.params.teamUUID}, {ManagersText: req.body.ManagersText});
+        res.sendStatus(200);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.put('/team-leaders-text/:teamUUID', async function(req, res){
+    try{
+        var team = await TeamModel.findOneAndUpdate({UUID: req.params.teamUUID}, {TeamLeadersText: req.body.TeamLeadersText});
+        res.sendStatus(200);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.put('/team-members-text/:teamUUID', async function(req, res){
+    try{
+        var team = await TeamModel.findOneAndUpdate({UUID: req.params.teamUUID}, {TeamMembersText: req.body.TeamMembersText});
+        res.sendStatus(200);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.put('/coaches-text/:teamUUID', async function(req, res){
+    try{
+        var team = await TeamModel.findOneAndUpdate({UUID: req.params.teamUUID}, {CoachesText: req.body.CoachesText});
+        res.sendStatus(200);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.put('/designers-text/:teamUUID', async function(req, res){
+    try{
+        var team = await TeamModel.findOneAndUpdate({UUID: req.params.teamUUID}, {DesignersText: req.body.DesignersText});
+        res.sendStatus(200);
     }catch(e){
         console.log(e);
         res.sendStatus(500);
