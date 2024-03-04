@@ -11,14 +11,13 @@
 \textbf{Back Text:} {{text}}\\
 \textbf{Amount:} \\
 \begin{itemize}
-\item[-] XXS:
-\item[-] XS:
-\item[-] S:
-\item[-] M:
-\item[-] L:
-\item[-] XL:
-\item[-] XXL:
-\item[-] 3XL:
+\item[-] XXS: {{XXS}}
+\item[-] XS: {{XS}}
+\item[-] S: {{S}}
+\item[-] M: {{M}}
+\item[-] L: {{L}}
+\item[-] XL: {{XL}}
+\item[-] XXL: {{XXL}}
 \end{itemize}
 
 \end{column}
