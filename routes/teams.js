@@ -30,20 +30,6 @@ router.get('/', function(req, res){
 router.get('/:uuid', function(req, res){
     res.status(200).sendFile(`${homeDir}/Client/Teams/Team/index.html`);
 });
-/*router.get('/duplicates', async function(req, res){
-    var members = await MemberModel.find({});
-    var indivEmail = [];
-    var dupeEmail = [];
-    for(var i=0; i<members.length; i++){
-        if(indivEmail.indexOf(members[i].Email) == -1){
-            indivEmail.push(members[i].Email);
-        }else{
-            //await MemberModel.findByIdAndDelete(members[i]._id);
-        }
-    }
-    console.log(dupeEmail);
-    res.sendStatus(200);
-});*/
 
 //POST routes
 router.post('/get-teams', async function(req, res){

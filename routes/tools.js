@@ -67,7 +67,7 @@ router.post('/create-t-shirt-presentation', async function(req, res){
 router.get('/t-shirt-presentation', async function(req, res){
     try{
         var roles = ['manager', 'team-leader', 'team-member', 'coach', 'designer'];
-        var priorityTeams = ['sports', 'stunt', 'gym', 'acting', 'makeup', 'steward', 'crew'];
+        var priorityTeams = ['lights','sports', 'stunt', 'gym', 'acting', 'makeup', 'steward', 'crew'];
         var sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
         //Get all members
         var teams = await TeamModel.find({});
@@ -202,11 +202,15 @@ async function CreatePresentation(slides, newFilePath){
     \\maketitle
     ${slides.join("\n")}
     \\end{document}`;
+    var ClientFiles = fs.readdirSync(`${homeDir}/Client/files`);
+    var tShirtImgs= [];
+    for(var i=0; i<ClientFiles.length; i++){
+        if(ClientFiles[i].indexOf("t-shirt") != -1) tShirtImgs.push(ClientFiles[i]);
+    }
     //Create the presentation file
     execSync(`cd ${homeDir}/Client/files/ ; touch presentation.tex`);
     fs.writeFileSync(`${homeDir}/Client/files/presentation.tex`, presentation);
-    //Remove all the temporary files used
-    execSync(`cd ${homeDir}/Client/files/ ; pdflatex presentation.tex ; mv presentation.pdf T_Shirt_Order_Springfest.pdf; rm t-shirt*.png presentation.*`);
+    execSync(`cd ${homeDir}/Client/files/ ; pdflatex presentation.tex ; mv presentation.pdf T_Shirt_Order_Springfest.pdf; mkdir T_Shirt_Order ; cd T_Shirt_Order ; mkdir t_shirts ; cd .. ; mv ${tShirtImgs.join(" ")} T_Shirt_Order/t_shirts ; mv presentation.tex T_Shirt_Order ; zip -r TShirtOrder T_Shirt_Order ; rm t-shirt*.png presentation.* ; rm -rf T_Shirt_Order`);
     execSync(`rm ${newFilePath}`);
     return true;
 }
