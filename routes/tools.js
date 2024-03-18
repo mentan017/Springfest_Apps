@@ -67,7 +67,7 @@ router.post('/create-t-shirt-presentation', async function(req, res){
 router.get('/t-shirt-presentation', async function(req, res){
     try{
         var roles = ['manager', 'team-leader', 'team-member', 'coach', 'designer'];
-        var priorityTeams = ['lights','sports', 'stunt', 'gym', 'acting', 'makeup', 'steward', 'crew'];
+        var priorityTeams = ['it', 'costume', 'lights','sports', 'stunt', 'gym', 'acting', 'makeup', 'steward', 'crew'];
         var sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
         //Get all members
         var teams = await TeamModel.find({});
